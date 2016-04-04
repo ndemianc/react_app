@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Square from './square';
 import Rook from './rook';
 import EmptyCell from './empty_cell';
+import { canMoveRook, moveRook } from './game';
 
 export default class Board extends Component {
   renderSquare(i) {
@@ -13,12 +14,19 @@ export default class Board extends Component {
     const piece = (x === rookX && y === rookY) ? <Rook /> : <EmptyCell />;
 
     return (
-      <div key={i} style={{ width: '12.5%', height: '12.5%' }}>
+      <div key={i} style={{ width: '12.5%', height: '12.5%' }}
+        onClick={() => this.handleSquareClick(x, y)}>
         <Square black={black}>
           {piece}
         </Square>
       </div>
     )
+  }
+
+  handleSquareClick(toX, toY) {
+    if (canMoveRook(toX, toY)) {
+      moveRook(toX, toY);
+    }
   }
 
   render() {
