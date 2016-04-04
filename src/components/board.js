@@ -3,29 +3,31 @@ import Square from './square';
 import Rook from './rook';
 import EmptyCell from './empty_cell';
 import { canMoveRook, moveRook } from './game';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import BoardSquare from './board_square';
 
-export default class Board extends Component {
+class Board extends Component {
   renderSquare(i) {
     const x = i % 8;
     const y = Math.floor(i / 8);
-    const black = (x + y) % 2 === 1;
-
-    const [rookX, rookY] = this.props.rookPosition;
-    const piece = (x === rookX && y === rookY) ? <Rook /> : <EmptyCell />;
 
     return (
-      <div key={i} style={{ width: '12.5%', height: '12.5%' }}
-        onClick={() => this.handleSquareClick(x, y)}>
-        <Square black={black}>
-          {piece}
-        </Square>
+      <div key={i} style={{ width: '12.5%', height: '12.5%' }}>
+        <BoardSquare x={x}
+          y={y}>
+          {this.renderPiece(x, y)}
+        </BoardSquare>
       </div>
-    )
+    );
   }
 
-  handleSquareClick(toX, toY) {
-    if (canMoveRook(toX, toY)) {
-      moveRook(toX, toY);
+  renderPiece(x, y) {
+    const [rookX, rookY] = this.props.rookPosition;
+    if (x === rookX && y === rookY) {
+      return <Rook />;
+    } else {
+      return <EmptyCell />;
     }
   }
 
@@ -53,3 +55,5 @@ Board.propTypes = {
     PropTypes.number.isRequired
   ).isRequired
 };
+
+export default DragDropContext(HTML5Backend)(Board);
