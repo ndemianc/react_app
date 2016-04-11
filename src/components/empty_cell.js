@@ -7,7 +7,6 @@ export default class EmptyCell extends Component {
           fontSize: 25,
           fontWeight: 'bold'
         }}>
-        O
       </span>
     );
   }
